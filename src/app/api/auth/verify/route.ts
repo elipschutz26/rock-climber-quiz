@@ -2,14 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { signToken } from '@/lib/auth'
 
-function getBaseUrl(req: NextRequest): string {
-  const proto = req.headers.get('x-forwarded-proto') ?? 'https'
-  const host = req.headers.get('x-forwarded-host') ?? req.headers.get('host') ?? ''
-  return `${proto}://${host}`
-}
-
 export async function GET(req: NextRequest) {
-  const base = getBaseUrl(req)
+  const base = process.env.BASE_URL ?? 'https://web-production-a3e76c.up.railway.app'
   const token = req.nextUrl.searchParams.get('token')
 
   if (!token) {
