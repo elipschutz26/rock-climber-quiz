@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { getSessionUserId } from '@/lib/auth'
 
 export async function GET() {
-  const userId = getSessionUserId()
+  const userId = await getSessionUserId()
 
   if (!userId) {
     return NextResponse.json({ user: null }, { status: 401 })

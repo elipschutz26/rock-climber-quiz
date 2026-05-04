@@ -4,7 +4,7 @@ import { getSessionUserId } from '@/lib/auth'
 import { questions, scoreQuiz } from '@/lib/quiz-data'
 
 export async function POST(req: NextRequest) {
-  const userId = getSessionUserId()
+  const userId = await getSessionUserId()
 
   if (!userId) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })

@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     data: { used: true },
   })
 
-  const sessionToken = signToken(record.userId)
+  const sessionToken = await signToken(record.userId)
 
   const response = NextResponse.redirect(`${base}/quiz`)
   response.cookies.set('session', sessionToken, {

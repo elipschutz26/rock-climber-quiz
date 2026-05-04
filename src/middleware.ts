@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyToken } from '@/lib/auth'
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const protectedPaths = ['/quiz', '/result']
   const isProtected = protectedPaths.some(path =>
     req.nextUrl.pathname.startsWith(path)
@@ -10,8 +10,9 @@ export function middleware(req: NextRequest) {
   if (!isProtected) return NextResponse.next()
 
   const token = req.cookies.get('session')?.value
+  const payload = token ? await verifyToken(token) : null
 
-  if (!token || !verifyToken(token)) {
+  if (!payload) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
