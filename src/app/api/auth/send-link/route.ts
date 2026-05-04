@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   })
 
   const token = crypto.randomBytes(32).toString('hex')
-  const expiresAt = new Date(Date.now() + 15 * 60 * 1000)
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000)
 
   await prisma.magicToken.create({
     data: { token, userId: user.id, expiresAt },
