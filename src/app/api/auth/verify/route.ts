@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { signToken } from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
-  const base = process.env.BASE_URL ?? 'https://web-production-a3e76c.up.railway.app'
+  const base = process.env.BASE_URL ?? 'https://climbtype.xyz'
   const token = req.nextUrl.searchParams.get('token')
 
   if (!token) {

@@ -3,11 +3,11 @@ import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function sendMagicLink(email: string, token: string) {
-  const baseUrl = process.env.BASE_URL ?? 'https://web-production-a3e76c.up.railway.app'
+  const baseUrl = process.env.BASE_URL ?? 'https://climbtype.xyz'
   const link = `${baseUrl}/api/auth/verify?token=${token}`
 
   await resend.emails.send({
-    from: 'Rock Climber Quiz <onboarding@resend.dev>',
+    from: 'Rock Climber Quiz <noreply@climbtype.xyz>',
     to: email,
     subject: 'Your login link for Rock Climber Quiz',
     html: `

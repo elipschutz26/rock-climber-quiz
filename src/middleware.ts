@@ -13,7 +13,7 @@ export async function middleware(req: NextRequest) {
   const payload = token ? await verifyToken(token) : null
 
   if (!payload) {
-    const base = process.env.BASE_URL ?? 'https://web-production-a3e76c.up.railway.app'
+    const base = process.env.BASE_URL ?? 'https://climbtype.xyz'
     return NextResponse.redirect(`${base}/`)
   }
 
