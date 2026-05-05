@@ -12,7 +12,6 @@ export default function QuizPage() {
   const [submitting, setSubmitting] = useState(false)
 
   const question = questions[currentIndex]
-  const progress = Math.round(((currentIndex) / questions.length) * 100)
   const isLast = currentIndex === questions.length - 1
 
   async function handleNext() {
