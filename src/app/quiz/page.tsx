@@ -13,13 +13,14 @@ export default function QuizPage() {
 
   const question = questions[currentIndex]
   const progress = Math.round(((currentIndex) / questions.length) * 100)
+  const isLast = currentIndex === questions.length - 1
 
   async function handleNext() {
     if (selected === null) return
 
     const newAnswers = [...answers, selected]
 
-    if (currentIndex < questions.length - 1) {
+    if (!isLast) {
       setAnswers(newAnswers)
       setCurrentIndex(currentIndex + 1)
       setSelected(null)
@@ -42,23 +43,30 @@ export default function QuizPage() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen px-4 py-12">
-      <div className="w-full max-w-2xl">
+    <main className="relative flex flex-col items-center justify-center min-h-screen px-4 py-12 overflow-hidden rock-texture">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(99,102,241,0.08)_0%,_transparent_60%)] pointer-events-none" />
+
+      <div className="relative w-full max-w-2xl">
+        {/* Progress */}
         <div className="mb-8">
-          <div className="flex justify-between text-sm text-slate-400 mb-2">
+          <div className="flex justify-between text-xs font-medium text-slate-500 mb-2">
             <span>Question {currentIndex + 1} of {questions.length}</span>
             <span>{progress}% complete</span>
           </div>
-          <div className="w-full bg-slate-800 rounded-full h-2">
+          <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
             <div
-              className="bg-white rounded-full h-2 transition-all duration-500"
+              className="bg-indigo-500 h-1.5 rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-8 mb-6">
-          <h2 className="text-2xl font-bold text-white mb-8">
+        {/* Question card */}
+        <div className="bg-slate-900/80 backdrop-blur border border-slate-700/60 rounded-2xl p-8 mb-5 shadow-xl">
+          <p className="text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-4">
+            Question {currentIndex + 1}
+          </p>
+          <h2 className="text-2xl font-bold text-white mb-8 leading-snug">
             {question.text}
           </h2>
 
@@ -69,10 +77,15 @@ export default function QuizPage() {
                 onClick={() => setSelected(i)}
                 className={`w-full text-left px-5 py-4 rounded-xl border transition-all duration-150 ${
                   selected === i
-                    ? 'bg-white text-slate-900 border-white font-medium'
-                    : 'bg-slate-900 text-slate-200 border-slate-600 hover:border-slate-400'
+                    ? 'bg-indigo-600/20 text-white border-indigo-500 shadow-sm shadow-indigo-900/30'
+                    : 'bg-slate-800/60 text-slate-300 border-slate-700/60 hover:border-slate-500 hover:bg-slate-800 hover:text-white'
                 }`}
               >
+                <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold mr-3 shrink-0 ${
+                  selected === i ? 'bg-indigo-500 text-white' : 'bg-slate-700 text-slate-400'
+                }`}>
+                  {String.fromCharCode(65 + i)}
+                </span>
                 {option.text}
               </button>
             ))}
@@ -82,13 +95,13 @@ export default function QuizPage() {
         <button
           onClick={handleNext}
           disabled={selected === null || submitting}
-          className="w-full bg-white text-slate-900 font-bold py-4 rounded-xl hover:bg-slate-100 transition-colors disabled:opacity-40 text-lg"
+          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg shadow-indigo-900/40 text-base"
         >
           {submitting
-            ? 'Calculating your result...'
-            : currentIndex < questions.length - 1
-            ? 'Next Question →'
-            : 'See My Result →'}
+            ? 'Calculating your result…'
+            : isLast
+            ? 'See My Result →'
+            : 'Next Question →'}
         </button>
       </div>
     </main>
