@@ -3,7 +3,7 @@ import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function sendMagicLink(email: string, token: string) {
-  const baseUrl = process.env.BASE_URL ?? 'https://climbtype.xyz'
+  const baseUrl = process.env.BASE_URL ?? 'https://www.climbtype.xyz'
   const link = `${baseUrl}/api/auth/verify?token=${token}`
 
   await resend.emails.send({
