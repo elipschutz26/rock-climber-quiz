@@ -77,15 +77,15 @@ export default function ResultPage({ searchParams }: ResultPageProps) {
           alt={type}
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        {/* Top vignette — fades photo edges into background color */}
+        {/* Gradient fade — starts early so photo bleeds smoothly into bg */}
         <div
           className="absolute inset-0"
-          style={{ background: `linear-gradient(to bottom, ${theme.topColor}88 0%, transparent 30%, transparent 50%, ${theme.topColor} 100%)` }}
+          style={{ background: `linear-gradient(to bottom, ${theme.topColor}66 0%, transparent 25%, transparent 40%, ${theme.topColor}dd 80%, ${theme.topColor} 100%)` }}
         />
         {/* Side vignettes */}
         <div
           className="absolute inset-0"
-          style={{ background: `linear-gradient(to right, ${theme.topColor}55 0%, transparent 20%, transparent 80%, ${theme.topColor}55 100%)` }}
+          style={{ background: `linear-gradient(to right, ${theme.topColor}66 0%, transparent 25%, transparent 75%, ${theme.topColor}66 100%)` }}
         />
 
         {/* Badge — top center over photo */}
@@ -94,17 +94,18 @@ export default function ResultPage({ searchParams }: ResultPageProps) {
             ✓ Quiz Complete
           </span>
         </div>
-      </div>
 
-      {/* Content — sits on the gradient, no card needed */}
-      <div className="relative z-10 w-full max-w-md text-center px-6 -mt-6 pb-10">
-
-        {/* Emoji with glow */}
-        <div className={`text-[5.5rem] leading-none mb-4 animate-scale-in delay-100 animate-float ${theme.glow}`}>
+        {/* Emoji — floats out from bottom of photo, straddling the seam */}
+        <div className={`absolute -bottom-10 left-1/2 -translate-x-1/2 z-20 text-[6rem] leading-none animate-scale-in delay-100 animate-float ${theme.glow}`}>
           {result.emoji}
         </div>
+      </div>
 
-        <p className="text-xs font-bold text-white/30 tracking-widest uppercase mb-2 animate-fade-in delay-200">
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-md text-center px-6 pt-14 pb-10">
+
+
+        <p className="text-xs font-bold text-white/30 tracking-widest uppercase mb-2 animate-fade-in delay-200 mt-2">
           Your Climbing Identity
         </p>
 
