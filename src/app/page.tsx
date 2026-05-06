@@ -14,7 +14,7 @@ const climberCards = [
     tagline: 'Power & Precision',
     description: 'Short, explosive problems. Just you, the rock, and a crash pad.',
     image: '/images/result-boulderer.jpg',
-    gradient: 'from-amber-900/80 to-stone-900/90',
+    gradient: 'from-amber-900/50 to-stone-900/70',
     accent: 'text-amber-400',
     border: 'border-amber-700/30',
   },
@@ -24,7 +24,7 @@ const climberCards = [
     tagline: 'Efficiency & Endurance',
     description: 'Clip bolts, refine your technique, and redpoint your project.',
     image: '/images/result-sport.jpg',
-    gradient: 'from-blue-900/80 to-slate-900/90',
+    gradient: 'from-blue-900/50 to-slate-900/70',
     accent: 'text-blue-400',
     border: 'border-blue-700/30',
   },
@@ -34,7 +34,7 @@ const climberCards = [
     tagline: 'Self-Reliance & Adventure',
     description: 'Build your own protection, commit to the unknown, embrace the crack.',
     image: '/images/result-trad.jpg',
-    gradient: 'from-green-900/80 to-slate-900/90',
+    gradient: 'from-green-900/50 to-slate-900/70',
     accent: 'text-emerald-400',
     border: 'border-emerald-700/30',
   },
@@ -44,7 +44,7 @@ const climberCards = [
     tagline: 'Big Objectives & Summits',
     description: 'Plan, move fast, and reach summits no one else attempts.',
     image: '/images/result-multipitch.jpg',
-    gradient: 'from-indigo-900/80 to-slate-900/90',
+    gradient: 'from-indigo-900/50 to-slate-900/70',
     accent: 'text-indigo-400',
     border: 'border-indigo-700/30',
   },
@@ -94,7 +94,7 @@ export default function HomePage() {
           <img
             src="/images/hero-bg.jpg"
             alt=""
-            className="w-full h-full object-cover opacity-25"
+            className="w-full h-full object-cover opacity-50"
           />
         </div>
 
@@ -104,7 +104,7 @@ export default function HomePage() {
         </div>
 
         {/* Gradient overlays for readability */}
-        <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#070d1a]/55 via-transparent to-[#070d1a]/85 pointer-events-none" />
+        <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#070d1a]/70 via-[#070d1a]/30 to-[#070d1a]/80 pointer-events-none" />
 
         {/* Hero content */}
         <div className="relative z-[3] w-full max-w-xl text-center">
@@ -241,7 +241,7 @@ export default function HomePage() {
                   <img
                     src={card.image}
                     alt={card.type}
-                    className="w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-500 group-hover:scale-105 transition-transform"
+                    className="w-full h-full object-cover opacity-65 group-hover:opacity-80 transition-opacity duration-500"
                     onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
                   />
                   <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient}`} />

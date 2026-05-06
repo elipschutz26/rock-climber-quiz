@@ -45,10 +45,10 @@ export default function ResultPage({ searchParams }: ResultPageProps) {
         <img
           src={imageSrc}
           alt={type}
-          className="w-full h-full object-cover opacity-30"
+          className="w-full h-full object-cover opacity-55"
         />
-        <div className={`absolute inset-0 bg-gradient-to-br ${result.color} opacity-70`} />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#070d1a] via-[#070d1a]/40 to-transparent" />
+        <div className={`absolute inset-0 bg-gradient-to-br ${result.color} opacity-40`} />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070d1a]/90 via-[#070d1a]/20 to-transparent" />
       </div>
 
       <div className="relative z-10 w-full max-w-lg text-center">
