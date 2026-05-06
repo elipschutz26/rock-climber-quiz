@@ -5,26 +5,22 @@ import { useRouter } from 'next/navigation'
 import { questions } from '@/lib/quiz-data'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const OPTION_LETTERS = ['A', 'B', 'C', 'D']
-
 export default function QuizPage() {
   const router = useRouter()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<number[]>([])
   const [selected, setSelected] = useState<number | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [direction, setDirection] = useState(1)
 
   const question = questions[currentIndex]
   const isLast = currentIndex === questions.length - 1
-  const progress = currentIndex / questions.length
+  const progress = (currentIndex / questions.length) * 100
 
   async function handleNext() {
     if (selected === null) return
     const newAnswers = [...answers, selected]
 
     if (!isLast) {
-      setDirection(1)
       setAnswers(newAnswers)
       setCurrentIndex(currentIndex + 1)
       setSelected(null)
@@ -46,123 +42,138 @@ export default function QuizPage() {
   }
 
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen px-4 py-12 bg-scene overflow-hidden">
+    <main className="relative min-h-screen overflow-hidden bg-[#060b14] flex flex-col">
 
-      {/* Background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-64 bg-indigo-600/8 blur-3xl rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-violet-700/8 blur-3xl rounded-full pointer-events-none" />
+      {/* Background photo */}
+      <div className="absolute inset-0 z-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/hero-bg.jpg" alt="" className="w-full h-full object-cover opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#060b14]/80 via-[#060b14]/60 to-[#060b14]/95" />
+      </div>
 
-      <div className="relative w-full max-w-2xl z-10">
+      {/* Progress bar — pinned to top */}
+      <div className="relative z-10 w-full h-0.5 bg-white/8">
+        <motion.div
+          className="h-full bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-400"
+          animate={{ width: `${progress}%` }}
+          transition={{ type: 'spring', stiffness: 80, damping: 20 }}
+        />
+      </div>
 
-        {/* Progress section */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold text-indigo-400 tracking-widest uppercase">
-              Question {currentIndex + 1} of {questions.length}
+      {/* Main content */}
+      <div className="relative z-10 flex flex-col flex-1 items-center justify-center px-4 py-10">
+        <div className="w-full max-w-2xl">
+
+          {/* Question counter */}
+          <div className="flex items-center justify-between mb-6">
+            <span className="text-xs font-bold tracking-widest text-indigo-400 uppercase">
+              The Quiz
             </span>
-            <span className="text-xs font-semibold text-slate-500 tabular-nums">
-              {Math.round(progress * 100)}% complete
+            <span className="font-display text-sm font-bold text-white/30 tabular-nums">
+              {String(currentIndex + 1).padStart(2, '0')}
+              <span className="text-white/15"> / </span>
+              {String(questions.length).padStart(2, '0')}
             </span>
           </div>
 
-          {/* Animated progress bar */}
-          <div className="relative h-1.5 bg-slate-800 rounded-full overflow-hidden">
+          <AnimatePresence mode="wait">
             <motion.div
-              className="absolute inset-y-0 left-0 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full"
-              initial={false}
-              animate={{ width: `${progress * 100}%` }}
-              transition={{ type: 'spring', stiffness: 120, damping: 20 }}
-            />
-          </div>
-
-          {/* Dot indicators */}
-          <div className="flex gap-1.5 mt-3">
-            {questions.map((_, i) => (
-              <motion.div
-                key={i}
-                animate={{
-                  backgroundColor:
-                    i < currentIndex ? '#6366f1' :
-                    i === currentIndex ? '#818cf8' :
-                    '#1e293b',
-                  scale: i === currentIndex ? 1.3 : 1,
-                }}
-                transition={{ duration: 0.25 }}
-                className="h-1.5 flex-1 rounded-full"
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Question card with slide animation */}
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={currentIndex}
-            custom={direction}
-            initial={{ opacity: 0, x: direction * 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: direction * -50 }}
-            transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-          >
-            <div className="glass glow-indigo rounded-2xl p-8 mb-4">
-
-              {/* Climbing icon decoration */}
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-lg bg-indigo-500/15 border border-indigo-500/20 flex items-center justify-center">
-                  <span className="text-indigo-400 text-sm">🧗</span>
-                </div>
-                <span className="text-xs font-bold text-indigo-400 tracking-widest uppercase">
-                  Question {currentIndex + 1}
-                </span>
-              </div>
-
-              <h2 className="font-display text-2xl font-bold text-white mb-7 leading-snug">
-                {question.text}
-              </h2>
-
-              <div className="space-y-2.5">
-                {question.options.map((option, i) => (
-                  <motion.button
-                    key={i}
-                    onClick={() => setSelected(i)}
-                    whileHover={{ scale: 1.01, x: 2 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                    className={`w-full text-left px-5 py-4 rounded-xl border transition-colors duration-150 flex items-start gap-4 ${
-                      selected === i
-                        ? 'bg-indigo-500/15 border-indigo-500/70 text-white shadow-sm shadow-indigo-900/20'
-                        : 'bg-slate-800/40 border-slate-700/50 text-slate-300 hover:border-slate-600/80 hover:bg-slate-800/70 hover:text-white'
-                    }`}
-                  >
-                    <span className={`shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold transition-colors duration-150 ${
-                      selected === i
-                        ? 'bg-indigo-500 text-white'
-                        : 'bg-slate-700/80 text-slate-400'
-                    }`}>
-                      {OPTION_LETTERS[i]}
-                    </span>
-                    <span className="pt-0.5">{option.text}</span>
-                  </motion.button>
-                ))}
-              </div>
-            </div>
-
-            <motion.button
-              onClick={handleNext}
-              disabled={selected === null || submitting}
-              whileHover={selected !== null && !submitting ? { scale: 1.02 } : {}}
-              whileTap={selected !== null && !submitting ? { scale: 0.98 } : {}}
-              className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-4 rounded-xl transition-all duration-200 disabled:opacity-25 disabled:cursor-not-allowed shadow-lg shadow-indigo-900/40 text-base"
+              key={currentIndex}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              {submitting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Calculating your result…
+              {/* Ghost question number — decorative watermark */}
+              <div className="relative mb-5 overflow-hidden">
+                <span
+                  className="absolute -top-6 -left-3 font-display font-extrabold text-white/[0.04] select-none pointer-events-none leading-none"
+                  style={{ fontSize: 'clamp(80px, 18vw, 160px)' }}
+                  aria-hidden="true"
+                >
+                  {String(currentIndex + 1).padStart(2, '0')}
                 </span>
-              ) : isLast ? 'Reveal My Climbing Type →' : 'Next Question →'}
-            </motion.button>
-          </motion.div>
-        </AnimatePresence>
+
+                {/* Question text */}
+                <h2
+                  className="relative font-display font-extrabold text-white leading-tight"
+                  style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.25rem)' }}
+                >
+                  {question.text}
+                </h2>
+              </div>
+
+              {/* Options */}
+              <div className="space-y-2.5 mb-6">
+                {question.options.map((option, i) => {
+                  const isSelected = selected === i
+                  return (
+                    <motion.button
+                      key={i}
+                      onClick={() => setSelected(i)}
+                      whileHover={{ x: 3 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                      className={`w-full flex items-stretch rounded-xl overflow-hidden border transition-all duration-200 ${
+                        isSelected
+                          ? 'border-indigo-500/60 shadow-lg shadow-indigo-900/30'
+                          : 'border-white/8 hover:border-white/20'
+                      }`}
+                    >
+                      {/* Number tab */}
+                      <div className={`flex items-center justify-center w-14 shrink-0 font-display text-sm font-bold tabular-nums transition-all duration-200 ${
+                        isSelected
+                          ? 'bg-indigo-500 text-white'
+                          : 'bg-white/5 text-white/25'
+                      }`}>
+                        {String(i + 1).padStart(2, '0')}
+                      </div>
+
+                      {/* Divider */}
+                      <div className={`w-px shrink-0 transition-colors duration-200 ${isSelected ? 'bg-indigo-400/30' : 'bg-white/8'}`} />
+
+                      {/* Option text */}
+                      <div className={`flex-1 px-5 py-4 text-left text-sm leading-snug transition-colors duration-200 ${
+                        isSelected ? 'bg-indigo-500/12 text-white' : 'bg-white/[0.03] text-slate-300 hover:text-white hover:bg-white/[0.06]'
+                      }`}>
+                        {option.text}
+                      </div>
+
+                      {/* Check icon */}
+                      <div className={`flex items-center pr-4 transition-all duration-200 ${isSelected ? 'opacity-100' : 'opacity-0'}`}>
+                        <div className="w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center shrink-0">
+                          <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                            <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </motion.button>
+                  )
+                })}
+              </div>
+
+              {/* Next button */}
+              <motion.button
+                onClick={handleNext}
+                disabled={selected === null || submitting}
+                whileHover={selected !== null && !submitting ? { scale: 1.015 } : {}}
+                whileTap={selected !== null && !submitting ? { scale: 0.985 } : {}}
+                className={`w-full py-4 rounded-xl font-bold text-base transition-all duration-300 ${
+                  selected !== null && !submitting
+                    ? 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-xl shadow-indigo-900/40'
+                    : 'bg-white/5 text-white/20 cursor-not-allowed'
+                }`}
+              >
+                {submitting ? (
+                  <span className="flex items-center justify-center gap-2.5">
+                    <span className="w-4 h-4 border-2 border-white/25 border-t-white rounded-full animate-spin" />
+                    Finding your type…
+                  </span>
+                ) : isLast ? 'Reveal My Climbing Type →' : 'Next →'}
+              </motion.button>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </main>
   )
