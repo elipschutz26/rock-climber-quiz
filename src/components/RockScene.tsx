@@ -1,74 +1,58 @@
 'use client'
 
-import { useRef, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-const STONE_COLORS = ['#8a7f74', '#9e9080', '#b0a090', '#7a8090', '#6e7a8a', '#a09070', '#9090a0']
+const PARTICLE_COUNT = 380
 
-function Rock({
-  position,
-  scale,
-  rotSpeed,
-  colorIndex,
-}: {
-  position: [number, number, number]
-  scale: number
-  rotSpeed: [number, number, number]
-  colorIndex: number
-}) {
-  const meshRef = useRef<THREE.Mesh>(null)
-  const offset = useMemo(() => Math.random() * Math.PI * 2, [])
+function ChalkDust() {
+  const { geo, velocities, offsets } = useMemo(() => {
+    const positions = new Float32Array(PARTICLE_COUNT * 3)
+    const velocities = new Float32Array(PARTICLE_COUNT)
+    const offsets = new Float32Array(PARTICLE_COUNT)
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      positions[i * 3]     = (Math.random() - 0.5) * 24
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 16
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 6
+      velocities[i] = 0.004 + Math.random() * 0.01
+      offsets[i]    = Math.random() * Math.PI * 2
+    }
+
+    const geo = new THREE.BufferGeometry()
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    return { geo, velocities, offsets }
+  }, [])
 
   useFrame(({ clock }) => {
-    if (!meshRef.current) return
     const t = clock.getElapsedTime()
-    meshRef.current.rotation.x += rotSpeed[0] * 0.016
-    meshRef.current.rotation.y += rotSpeed[1] * 0.016
-    meshRef.current.rotation.z += rotSpeed[2] * 0.016
-    meshRef.current.position.y = position[1] + Math.sin(t * 0.3 + offset) * 0.35
+    const pos = geo.attributes.position.array as Float32Array
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      pos[i * 3 + 1] += velocities[i]
+      pos[i * 3]     += Math.sin(t * 0.22 + offsets[i]) * 0.004
+
+      if (pos[i * 3 + 1] > 9) {
+        pos[i * 3 + 1] = -9
+        pos[i * 3]     = (Math.random() - 0.5) * 24
+      }
+    }
+
+    geo.attributes.position.needsUpdate = true
   })
 
   return (
-    <mesh ref={meshRef} position={position} scale={scale}>
-      <icosahedronGeometry args={[1, 1]} />
-      <meshStandardMaterial
-        color={STONE_COLORS[colorIndex % STONE_COLORS.length]}
-        roughness={0.75}
-        metalness={0.15}
-        emissive={STONE_COLORS[colorIndex % STONE_COLORS.length]}
-        emissiveIntensity={0.08}
+    <points geometry={geo}>
+      <pointsMaterial
+        color="#e8e0d4"
+        size={0.065}
+        transparent
+        opacity={0.55}
+        sizeAttenuation
+        depthWrite={false}
       />
-    </mesh>
-  )
-}
-
-function RocksField() {
-  const rocks = useMemo(
-    () =>
-      Array.from({ length: 42 }, (_, i) => ({
-        position: [
-          (Math.random() - 0.5) * 32,
-          (Math.random() - 0.5) * 22,
-          -2 - Math.random() * 16,
-        ] as [number, number, number],
-        scale: 0.14 + Math.random() * 0.72,
-        rotSpeed: [
-          (Math.random() - 0.5) * 0.35,
-          (Math.random() - 0.5) * 0.45,
-          (Math.random() - 0.5) * 0.25,
-        ] as [number, number, number],
-        colorIndex: i % STONE_COLORS.length,
-      })),
-    []
-  )
-
-  return (
-    <>
-      {rocks.map((rock, i) => (
-        <Rock key={i} {...rock} />
-      ))}
-    </>
+    </points>
   )
 }
 
@@ -79,10 +63,7 @@ export default function RockScene() {
       style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
       gl={{ antialias: true, alpha: true }}
     >
-      <ambientLight intensity={1.2} color="#ffffff" />
-      <directionalLight position={[5, 8, 5]} intensity={2.0} color="#c4b5fd" />
-      <directionalLight position={[-6, -4, 3]} intensity={1.0} color="#818cf8" />
-      <RocksField />
+      <ChalkDust />
     </Canvas>
   )
 }
