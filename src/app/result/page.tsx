@@ -9,10 +9,10 @@ const resultImages: Record<ClimberType, string> = {
 }
 
 const resultAccents: Record<ClimberType, { badge: string; btn: string }> = {
-  Boulderer:              { badge: 'bg-amber-500/20 border-amber-400/30 text-amber-200',   btn: 'from-amber-600 to-orange-700 hover:from-amber-500 hover:to-orange-600' },
-  'Sport Climber':        { badge: 'bg-blue-500/20 border-blue-400/30 text-blue-200',       btn: 'from-blue-600 to-slate-700 hover:from-blue-500 hover:to-slate-600' },
-  'Trad Climber':         { badge: 'bg-emerald-500/20 border-emerald-400/30 text-emerald-200', btn: 'from-emerald-700 to-slate-700 hover:from-emerald-600 hover:to-slate-600' },
-  'Multi-Pitch Adventurer': { badge: 'bg-indigo-500/20 border-indigo-400/30 text-indigo-200', btn: 'from-indigo-600 to-violet-700 hover:from-indigo-500 hover:to-violet-600' },
+  Boulderer:                { badge: 'bg-amber-500/20 border-amber-400/30 text-amber-200',      btn: 'from-amber-600 to-orange-700 hover:from-amber-500 hover:to-orange-600' },
+  'Sport Climber':          { badge: 'bg-blue-500/20 border-blue-400/30 text-blue-200',          btn: 'from-blue-600 to-slate-700 hover:from-blue-500 hover:to-slate-600' },
+  'Trad Climber':           { badge: 'bg-emerald-500/20 border-emerald-400/30 text-emerald-200', btn: 'from-emerald-700 to-slate-700 hover:from-emerald-600 hover:to-slate-600' },
+  'Multi-Pitch Adventurer': { badge: 'bg-indigo-500/20 border-indigo-400/30 text-indigo-200',   btn: 'from-indigo-600 to-violet-700 hover:from-indigo-500 hover:to-violet-600' },
 }
 
 interface ResultPageProps {
@@ -35,62 +35,60 @@ export default function ResultPage({ searchParams }: ResultPageProps) {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black">
+    <main className="relative min-h-screen overflow-hidden bg-black flex flex-col">
 
-      {/* Full-bleed image — clearly visible */}
+      {/* Photo — top half of screen */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={imageSrc}
         alt={type}
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover object-top"
       />
 
-      {/* Gradient: only darkens from the bottom up — top stays bright */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10" />
-
-      {/* Vignette edges for depth */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_50%,rgba(0,0,0,0.35)_100%)]" />
+      {/* Subtle top vignette for badge readability */}
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/50 to-transparent z-10 pointer-events-none" />
 
       {/* Badge — top center */}
-      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10 animate-fade-in delay-0">
+      <div className="absolute top-7 left-1/2 -translate-x-1/2 z-20 animate-fade-in delay-0">
         <span className={`inline-flex items-center gap-2 border text-xs font-semibold px-4 py-1.5 rounded-full tracking-wide backdrop-blur-sm ${accent.badge}`}>
           ✓ Quiz Complete
         </span>
       </div>
 
-      {/* Emoji — floats in the center of the image */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[65%] z-10 animate-scale-in delay-200">
-        <span className="text-[6rem] sm:text-[8rem] drop-shadow-2xl animate-float leading-none block">
-          {result.emoji}
-        </span>
-      </div>
+      {/* Spacer — pushes panel to bottom ~50% */}
+      <div className="flex-1" style={{ minHeight: '42vh' }} />
 
-      {/* Content — anchored to bottom, image visible above */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-8 sm:pb-10">
-        <div className="max-w-lg mx-auto text-center">
+      {/* Bottom sheet panel */}
+      <div className="relative z-10 bg-[#070d1a] rounded-t-[2rem] px-6 pt-20 pb-8 shadow-2xl">
 
-          <p className="text-xs font-bold text-white/40 tracking-widest uppercase mb-2 animate-fade-in delay-300">
+        {/* Emoji — straddles image / panel boundary */}
+        <div className="absolute -top-12 left-1/2 -translate-x-1/2 animate-scale-in delay-200">
+          <span className="text-[5.5rem] drop-shadow-2xl leading-none block animate-float">
+            {result.emoji}
+          </span>
+        </div>
+
+        <div className="max-w-md mx-auto text-center">
+          <p className="text-xs font-bold text-white/35 tracking-widest uppercase mb-2 animate-fade-in delay-300">
             Your Climbing Identity
           </p>
-
-          <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight tracking-tight animate-fade-in-up delay-300">
+          <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-white mb-4 leading-tight animate-fade-in-up delay-300">
             {result.title}
           </h1>
-
-          <p className="text-slate-300 text-sm leading-relaxed mb-6 animate-fade-in delay-400">
+          <p className="text-slate-400 text-sm leading-relaxed mb-7 animate-fade-in delay-400">
             {result.description}
           </p>
 
           <div className="space-y-2.5 animate-fade-in-up delay-500">
             <Link
               href="/quiz"
-              className={`block w-full bg-gradient-to-r ${accent.btn} text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-xl shadow-black/40 active:scale-[0.98]`}
+              className={`block w-full bg-gradient-to-r ${accent.btn} text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-lg active:scale-[0.98]`}
             >
               Take the Quiz Again
             </Link>
             <Link
               href="/"
-              className="block w-full bg-white/10 backdrop-blur-sm border border-white/15 text-white/80 font-medium py-3.5 rounded-xl hover:bg-white/15 hover:text-white transition-all duration-150 active:scale-[0.98]"
+              className="block w-full border border-white/10 text-white/60 font-medium py-3.5 rounded-xl hover:text-white hover:border-white/25 transition-all duration-150 active:scale-[0.98]"
             >
               ← Back to Home
             </Link>
