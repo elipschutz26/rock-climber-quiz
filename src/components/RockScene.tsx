@@ -4,7 +4,7 @@ import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-const STONE_COLORS = ['#3a3533', '#2d3142', '#383838', '#4a4440', '#2a2f3d', '#353030', '#3d3a48']
+const STONE_COLORS = ['#8a7f74', '#9e9080', '#b0a090', '#7a8090', '#6e7a8a', '#a09070', '#9090a0']
 
 function Rock({
   position,
@@ -34,8 +34,10 @@ function Rock({
       <icosahedronGeometry args={[1, 1]} />
       <meshStandardMaterial
         color={STONE_COLORS[colorIndex % STONE_COLORS.length]}
-        roughness={0.88}
-        metalness={0.08}
+        roughness={0.75}
+        metalness={0.15}
+        emissive={STONE_COLORS[colorIndex % STONE_COLORS.length]}
+        emissiveIntensity={0.08}
       />
     </mesh>
   )
@@ -77,9 +79,9 @@ export default function RockScene() {
       style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
       gl={{ antialias: true, alpha: true }}
     >
-      <ambientLight intensity={0.5} color="#6366f1" />
-      <directionalLight position={[5, 8, 5]} intensity={0.9} color="#a5b4fc" />
-      <directionalLight position={[-6, -4, 3]} intensity={0.35} color="#818cf8" />
+      <ambientLight intensity={1.2} color="#ffffff" />
+      <directionalLight position={[5, 8, 5]} intensity={2.0} color="#c4b5fd" />
+      <directionalLight position={[-6, -4, 3]} intensity={1.0} color="#818cf8" />
       <RocksField />
     </Canvas>
   )
