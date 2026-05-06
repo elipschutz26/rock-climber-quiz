@@ -47,8 +47,8 @@ export default function QuizPage() {
       {/* Background photo */}
       <div className="absolute inset-0 z-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/hero-bg.jpg" alt="" className="w-full h-full object-cover opacity-20" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#060b14]/80 via-[#060b14]/60 to-[#060b14]/95" />
+        <img src="/images/result-quiz.jpg" alt="" className="w-full h-full object-cover opacity-55" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#060b14]/50 via-[#060b14]/30 to-[#060b14]/70" />
       </div>
 
       {/* Progress bar — pinned to top */}
