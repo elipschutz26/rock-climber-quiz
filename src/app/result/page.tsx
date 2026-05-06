@@ -8,11 +8,11 @@ const resultImages: Record<ClimberType, string> = {
   'Multi-Pitch Adventurer': '/images/result-multipitch.jpg',
 }
 
-const resultAccents: Record<ClimberType, { badge: string; button: string }> = {
-  Boulderer: { badge: 'bg-amber-500/15 border-amber-500/25 text-amber-300', button: 'from-amber-700 to-orange-800 hover:from-amber-600 hover:to-orange-700' },
-  'Sport Climber': { badge: 'bg-blue-500/15 border-blue-500/25 text-blue-300', button: 'from-blue-700 to-slate-800 hover:from-blue-600 hover:to-slate-700' },
-  'Trad Climber': { badge: 'bg-emerald-500/15 border-emerald-500/25 text-emerald-300', button: 'from-emerald-800 to-slate-800 hover:from-emerald-700 hover:to-slate-700' },
-  'Multi-Pitch Adventurer': { badge: 'bg-indigo-500/15 border-indigo-500/25 text-indigo-300', button: 'from-indigo-700 to-slate-900 hover:from-indigo-600 hover:to-slate-800' },
+const resultAccents: Record<ClimberType, { badge: string; btn: string }> = {
+  Boulderer:              { badge: 'bg-amber-500/20 border-amber-400/30 text-amber-200',   btn: 'from-amber-600 to-orange-700 hover:from-amber-500 hover:to-orange-600' },
+  'Sport Climber':        { badge: 'bg-blue-500/20 border-blue-400/30 text-blue-200',       btn: 'from-blue-600 to-slate-700 hover:from-blue-500 hover:to-slate-600' },
+  'Trad Climber':         { badge: 'bg-emerald-500/20 border-emerald-400/30 text-emerald-200', btn: 'from-emerald-700 to-slate-700 hover:from-emerald-600 hover:to-slate-600' },
+  'Multi-Pitch Adventurer': { badge: 'bg-indigo-500/20 border-indigo-400/30 text-indigo-200', btn: 'from-indigo-600 to-violet-700 hover:from-indigo-500 hover:to-violet-600' },
 }
 
 interface ResultPageProps {
@@ -28,72 +28,73 @@ export default function ResultPage({ searchParams }: ResultPageProps) {
   if (!result) {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen px-4 bg-scene">
-        <div className="text-center">
-          <p className="text-slate-400 mb-4">Result not found.</p>
-          <Link href="/quiz" className="text-indigo-400 underline hover:text-indigo-300">Retake the quiz</Link>
-        </div>
+        <p className="text-slate-400 mb-4">Result not found.</p>
+        <Link href="/quiz" className="text-indigo-400 underline hover:text-indigo-300">Retake the quiz</Link>
       </main>
     )
   }
 
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen px-4 py-12 overflow-hidden bg-[#070d1a]">
+    <main className="relative min-h-screen overflow-hidden bg-black">
 
-      {/* Full-bleed hero background image */}
-      <div className="absolute inset-0 z-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imageSrc}
-          alt={type}
-          className="w-full h-full object-cover opacity-55"
-        />
-        <div className={`absolute inset-0 bg-gradient-to-br ${result.color} opacity-40`} />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#070d1a]/90 via-[#070d1a]/20 to-transparent" />
+      {/* Full-bleed image — clearly visible */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={imageSrc}
+        alt={type}
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+
+      {/* Gradient: only darkens from the bottom up — top stays bright */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10" />
+
+      {/* Vignette edges for depth */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,transparent_50%,rgba(0,0,0,0.35)_100%)]" />
+
+      {/* Badge — top center */}
+      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10 animate-fade-in delay-0">
+        <span className={`inline-flex items-center gap-2 border text-xs font-semibold px-4 py-1.5 rounded-full tracking-wide backdrop-blur-sm ${accent.badge}`}>
+          ✓ Quiz Complete
+        </span>
       </div>
 
-      <div className="relative z-10 w-full max-w-lg text-center">
-
-        {/* Badge — fades in */}
-        <div className="flex justify-center mb-6 animate-fade-in-up delay-0">
-          <span className={`inline-flex items-center gap-2 border text-xs font-semibold px-4 py-1.5 rounded-full tracking-wide ${accent.badge}`}>
-            ✓ Quiz Complete
-          </span>
-        </div>
-
-        {/* Giant emoji — floats */}
-        <div className="text-[7rem] mb-2 animate-scale-in delay-100 drop-shadow-2xl leading-none animate-float">
+      {/* Emoji — floats in the center of the image */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[65%] z-10 animate-scale-in delay-200">
+        <span className="text-[6rem] sm:text-[8rem] drop-shadow-2xl animate-float leading-none block">
           {result.emoji}
-        </div>
+        </span>
+      </div>
 
-        {/* Eyebrow label */}
-        <p className="text-xs font-bold text-white/40 tracking-widest uppercase mb-2 animate-fade-in delay-200">
-          Your Climbing Identity
-        </p>
+      {/* Content — anchored to bottom, image visible above */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-8 sm:pb-10">
+        <div className="max-w-lg mx-auto text-center">
 
-        {/* Main title — big reveal */}
-        <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-white mb-6 tracking-tight leading-tight animate-fade-in-up delay-300">
-          {result.title}
-        </h1>
+          <p className="text-xs font-bold text-white/40 tracking-widest uppercase mb-2 animate-fade-in delay-300">
+            Your Climbing Identity
+          </p>
 
-        {/* Description card */}
-        <div className="glass glow-indigo rounded-2xl px-8 py-6 mb-8 animate-fade-in-up delay-400">
-          <p className="text-slate-200 text-base leading-relaxed">{result.description}</p>
-        </div>
+          <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight tracking-tight animate-fade-in-up delay-300">
+            {result.title}
+          </h1>
 
-        {/* Actions */}
-        <div className="space-y-3 animate-fade-in-up delay-500">
-          <Link
-            href="/quiz"
-            className={`block w-full bg-gradient-to-r ${accent.button} text-white font-bold py-4 rounded-xl transition-all duration-200 shadow-xl shadow-black/40 active:scale-[0.98]`}
-          >
-            Take the Quiz Again
-          </Link>
-          <Link
-            href="/"
-            className="block w-full glass text-slate-300 font-medium py-4 rounded-xl hover:text-white transition-all duration-150 active:scale-[0.98]"
-          >
-            ← Back to Home
-          </Link>
+          <p className="text-slate-300 text-sm leading-relaxed mb-6 animate-fade-in delay-400">
+            {result.description}
+          </p>
+
+          <div className="space-y-2.5 animate-fade-in-up delay-500">
+            <Link
+              href="/quiz"
+              className={`block w-full bg-gradient-to-r ${accent.btn} text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-xl shadow-black/40 active:scale-[0.98]`}
+            >
+              Take the Quiz Again
+            </Link>
+            <Link
+              href="/"
+              className="block w-full bg-white/10 backdrop-blur-sm border border-white/15 text-white/80 font-medium py-3.5 rounded-xl hover:bg-white/15 hover:text-white transition-all duration-150 active:scale-[0.98]"
+            >
+              ← Back to Home
+            </Link>
+          </div>
         </div>
       </div>
     </main>
