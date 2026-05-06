@@ -67,9 +67,9 @@ export default function ResultPage({ searchParams }: ResultPageProps) {
       <img
         src={imageSrc}
         alt=""
-        className="absolute inset-0 w-full h-full object-cover opacity-30"
+        className="absolute inset-0 w-full h-full object-cover opacity-70"
       />
-      <div className="absolute inset-0 bg-[#070d1a]/75" />
+      <div className="absolute inset-0 bg-[#070d1a]/45" />
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-md text-center">
