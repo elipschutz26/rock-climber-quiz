@@ -81,7 +81,7 @@ export default function ResultPage({ searchParams }: ResultPageProps) {
 
       {/* Photo card — clearly visible, framed */}
       <div className={`relative w-full max-w-sm rounded-2xl overflow-hidden ring-2 ${theme.ring} shadow-2xl mb-0 animate-scale-in delay-100`}
-           style={{ height: '220px' }}>
+           style={{ height: '290px' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imageSrc}
@@ -93,13 +93,13 @@ export default function ResultPage({ searchParams }: ResultPageProps) {
       </div>
 
       {/* Emoji overlapping bottom of card */}
-      <div className={`-mt-8 text-[5rem] leading-none animate-scale-in delay-200 animate-float z-10 ${theme.glow}`}>
+      <div className={`-mt-9 text-[6rem] leading-none animate-scale-in delay-200 animate-float z-10 ${theme.glow}`}>
         {result.emoji}
       </div>
 
       {/* Text content */}
       <div className="text-center max-w-md mt-2">
-        <p className="text-xs font-bold text-white/30 tracking-widest uppercase mb-2 animate-fade-in delay-300">
+        <p className="text-xs font-bold text-white/50 tracking-widest uppercase mb-2 animate-fade-in delay-300">
           Your Climbing Identity
         </p>
         <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-white mb-5 leading-tight animate-fade-in-up delay-300">
@@ -121,7 +121,7 @@ export default function ResultPage({ searchParams }: ResultPageProps) {
           </Link>
           <Link
             href="/"
-            className="block w-full border border-white/10 text-white/50 font-medium py-4 rounded-xl hover:text-white hover:border-white/25 transition-all duration-150 active:scale-[0.98]"
+            className="block w-full border border-white/20 text-white/70 font-medium py-4 rounded-xl hover:text-white hover:border-white/40 transition-all duration-150 active:scale-[0.98]"
           >
             ← Back to Home
           </Link>
