@@ -62,17 +62,18 @@ export default function ResultPage({ searchParams }: ResultPageProps) {
   return (
     <main className="relative flex flex-col items-center justify-center min-h-screen px-4 py-16 overflow-hidden">
 
-      {/* Photo — heavily darkened, pure atmosphere */}
+      {/* Photo */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={imageSrc}
         alt=""
-        className="absolute inset-0 w-full h-full object-cover opacity-70"
+        className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-[#070d1a]/45" />
+      {/* Consistent dark overlay — evenly darkens the whole image */}
+      <div className="absolute inset-0 bg-black/55" />
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-md text-center">
+      <div className="relative z-10 w-full max-w-md text-center bg-black/30 backdrop-blur-md border border-white/10 rounded-3xl px-8 py-10">
 
         {/* Badge */}
         <div className="flex justify-center mb-10 animate-fade-in delay-0">
